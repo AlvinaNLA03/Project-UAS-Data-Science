@@ -1,19 +1,19 @@
----
+
 ## INFORMASI PROYEK
 
 **Judul Proyek:**  
 [(Contoh: "Klasifikasi Penyakit Daun Menggunakan CNN", "Prediksi Harga Rumah dengan Machine Learning", "Analisis Sentimen Ulasan Produk")]
 
-**Nama Mahasiswa:** [Nama Lengkap]  
-**NIM:** [Nomor Induk Mahasiswa]  
-**Program Studi:** [Teknologi Informasi / Rekayasa Perangkat Lunak]  
-**Mata Kuliah:** [Nama Mata Kuliah]  
-**Dosen Pengampu:** [Nama Dosen]  
-**Tahun Akademik:** [Tahun/Semester]  
-**Link GitHub Repository:** [URL Repository]  
-**Link Video Pembahasan:** [URL Video (YouTube/Drive)]  
-**SDG yang Dipilih:** [Nomor & nama Goal, misal: SDG 3 – Kehidupan Sehat dan Sejahtera]  
-**Target SDG yang Relevan:** [misal: Target 3.4 – mengurangi kematian dini akibat penyakit tidak menular]
+**Nama Mahasiswa:** <br> 1.Alvina L.A <br> 2.Julyo Firnanda <br> 3.Nadia Tifara S   
+**NIM:** <br> (244311003) <br> (244311016) <br> (244311022)  
+**Program Studi:** Teknologi Informasi / Rekayasa Perangkat Lunak  
+**Mata Kuliah:** Data Science  
+**Dosen Pengampu:** Gus Nanang Syaifuddiin S.Kom,M.Kom  
+**Tahun Akademik:** 2026/5  
+**Link GitHub Repository:** [https://github.com/AlvinaNLA03/Project-UAS-Data-Science.git]  
+**Link Video Pembahasan:** URL Video (YouTube/Drive)  
+**SDG yang Dipilih:** SDG 15 - Life on Land (Ekosistem Daratan)  
+**Target SDG yang Relevan:** Target 15.5 – Perlindungan habitat alami, penghentian kehilangan keanekaragaman hayati, dan perlindungan spesies terancam punah.
 
 ---
 
@@ -58,16 +58,20 @@ Pada proyek ini, mahasiswa diharapkan dapat:
 ## 2. PROJECT OVERVIEW  **[L]**
 
 ### 2.1 Latar Belakang
-**Isi bagian ini dengan:**
-- Mengapa proyek ini penting?
-- Permasalahan umum pada domain terkait (misal: kesehatan, pendidikan, keuangan, pertanian, NLP, computer vision, dll.)
-- Manfaat proyek untuk pengguna, bisnis, atau penelitian
-- Studi literatur atau referensi ilmiah (minimal 1–2 sumber wajib)
-- Keterkaitan masalah dengan SDGs yang dipilih (dijabarkan di Bab 2.2)
+Indonesia memiliki keanekaragaman hayati yang tinggi, baik dari kelompok tumbuhan maupun hewan. Keanekaragaman tersebut tersebar di berbagai wilayah dengan karakteristik lingkungan yang berbeda-beda. Informasi mengenai keberadaan spesies menjadi salah satu hal penting dalam mendukung kegiatan pemantauan dan pelestarian keanekaragaman hayati.
+
+Namun, data mengenai kemunculan spesies yang tersedia belum tentu menggambarkan kondisi keanekaragaman hayati secara merata di seluruh Indonesia. Hal ini dapat disebabkan oleh perbedaan intensitas pengamatan, lokasi penelitian, serta kelengkapan dokumentasi spesies di setiap wilayah. Akibatnya, diperlukan analisis untuk mengetahui bagaimana pola persebaran catatan spesies berdasarkan wilayah dan waktu.
+
+Penelitian Setiawan (2022) membahas kondisi keanekaragaman hayati Indonesia serta berbagai permasalahan yang dihadapi dalam upaya konservasinya. Sementara itu, Sanjaya et al. (2017) menunjukkan bahwa layanan web GBIF dapat dimanfaatkan untuk memperoleh informasi keanekaragaman tumbuhan di Indonesia. Hal ini menjadi salah satu dasar pemilihan GBIF sebagai sumber data dalam project ini.
+
+Project ini menggunakan data kemunculan spesies dari Global Biodiversity Information Facility (GBIF) dengan cakupan wilayah Indonesia dan periode pengamatan 2015–2025. Data yang diperoleh akan diolah berdasarkan lokasi dan tahun pengamatan untuk menghasilkan karakteristik berupa jumlah catatan kemunculan, jumlah spesies, jumlah famili, serta komposisi kelompok organisme.
+
+Selanjutnya, pendekatan Unsupervised Learning dengan metode clustering digunakan untuk mengelompokkan wilayah berdasarkan kesamaan karakteristik catatan keanekaragaman hayati. Tiga model yang direncanakan adalah K-Means sebagai baseline, Gaussian Mixture Model (GMM) sebagai model lanjutan, dan Deep Embedded Clustering (DEC) sebagai model deep learning.
+
+Hasil analisis akan disajikan melalui dashboard interaktif yang menampilkan persebaran catatan spesies, perubahan jumlah catatan dari tahun ke tahun, serta hasil pengelompokan wilayah. Dashboard ini diharapkan dapat membantu pengguna memahami pola dokumentasi keanekaragaman hayati di Indonesia sebagai informasi pendukung kegiatan pemantauan dan konservasi.
 
 **Contoh referensi (berformat APA/IEEE):**
-> Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press.
-
+> <br> 1. Setiawan (2022), Keanekaragaman Hayati Indonesia: Masalah dan Upaya Konservasinya. <br> 2. Sanjaya et al. (2017), Pemanfaatan Layanan Web Keanekaragaman untuk Pengelolaan Informasi Tumbuhan Obat Indonesia. <br> 3. Turnip dan Fitriana (2023), Clustering Kabupaten Berdasarkan Luas Hutan Menggunakan Metode K-Means di Provinsi Jawa Tengah.
 **[Jelaskan konteks dan latar belakang proyek]**
 
 ### 2.2 Keterkaitan dengan SDGs (WAJIB)
@@ -76,17 +80,17 @@ Ide proyek **berasal dari mahasiswa** dan harus selaras dengan **salah satu** da
 
 | Komponen | Pertanyaan Panduan | Jawaban Anda |
 |----------|--------------------|--------------|
-| **SDG yang dipilih** | Goal nomor berapa dan apa namanya? | [ ... ] |
-| **Target SDG** | Target (misal 3.4, 13.1) mana yang paling relevan? | [ ... ] |
-| **Masalah nyata** | Masalah konkret apa yang diangkat? Siapa yang terdampak? | [ ... ] |
-| **Peran ML** | Mengapa ML/DL cocok? Apa keputusan atau proses yang dibantu? | [ ... ] |
-| **Indikator kontribusi** | Bagaimana hasil model berkontribusi pada target SDG (langsung/tidak langsung)? | [ ... ] |
-| **Pertimbangan etika** | Risiko bias, privasi, atau dampak salah prediksi? | [ ... ] |
+| **SDG yang dipilih** | Goal nomor berapa dan apa namanya? | SDG 15 – Life on Land (Ekosistem Daratan). |
+| **Target SDG** | Target (misal 3.4, 13.1) mana yang paling relevan? | Target 15.5, yaitu mengambil tindakan untuk mengurangi degradasi habitat alami, menghentikan kehilangan keanekaragaman hayati, serta melindungi spesies yang terancam punah. |
+| **Masalah nyata** | Masalah konkret apa yang diangkat? Siapa yang terdampak? | Indonesia memiliki keanekaragaman hayati yang tinggi, tetapi dokumentasi kemunculan spesies belum merata berdasarkan lokasi dan waktu pengamatan. |
+| **Peran ML** | Mengapa ML/DL cocok? Apa keputusan atau proses yang dibantu? | Machine Learning digunakan untuk menemukan pola dan mengelompokkan wilayah berdasarkan karakteristik catatan kemunculan spesies menggunakan metode clustering. |
+| **Indikator kontribusi** | Bagaimana hasil model berkontribusi pada target SDG (langsung/tidak langsung)? | Menghasilkan informasi mengenai pola persebaran catatan spesies, jumlah spesies yang tercatat, dan karakteristik kelompok wilayah. Hasilnya dapat menjadi informasi pendukung pemantauan keanekaragaman hayati. |
+| **Pertimbangan etika** | Risiko bias, privasi, atau dampak salah prediksi? | Memperhatikan ketimpangan data pengamatan, kelengkapan informasi spesies, dan perlindungan lokasi spesies yang sensitif. Jumlah catatan tidak dianggap sebagai jumlah populasi sebenarnya. |
 
-**Sumber ide:** [Jelaskan dari mana ide muncul: pengalaman pribadi, lingkungan sekitar, isu lokal/nasional, dll.]
+**Sumber ide:** [Ide project ini berasal dari ketertarikan pada permasalahan keanekaragaman hayati di Indonesia dan untuk memahami pola persebaran flora dan fauna dengan memanfaatkan data terbuka.Data dari GBIF dipilih karena menyediakan informasi kemunculan spesies yang memiliki atribut lokasi dan waktu pengamatan sehingga dapat dimanfaatkan untuk analisis menggunakan Machine Learning.]
 
 ### 2.3 Ringkasan Alur Lifecycle Proyek
-Jelaskan dalam 1 paragraf pendek bagaimana proyek Anda melewati tahap L → M → O → P (dan iterasi apa yang direncanakan).
+Project ini akan dikerjakan menggunakan tahapan Machine Learning Lifecycle L-M-O-P. Pada tahap Learning Problem (L), dilakukan identifikasi permasalahan, pemilihan SDG, pengumpulan dataset GBIF, dan pengolahan data kemunculan spesies. Selanjutnya, tahap Model Design (M) dilakukan dengan merancang tiga model clustering, yaitu K-Means, Gaussian Mixture Model, dan Deep Embedded Clustering. Pada tahap Optimization (O), dilakukan pengaturan parameter dan proses pelatihan model untuk memperoleh hasil pengelompokan yang baik. Terakhir, tahap Predict & Evaluate (P) dilakukan dengan membandingkan hasil ketiga model menggunakan metrik evaluasi clustering. Hasil terbaik kemudian digunakan sebagai dasar pembuatan dashboard interaktif. Apabila hasil evaluasi belum sesuai, proses akan diperbaiki melalui tahapan sebelumnya.
 
 **[Tulis ringkasan alur lifecycle proyek Anda]**
 
@@ -95,7 +99,7 @@ Jelaskan dalam 1 paragraf pendek bagaimana proyek Anda melewati tahap L → M �
 ## 3. BUSINESS UNDERSTANDING / PROBLEM UNDERSTANDING  **[L]**
 
 ### 3.1 Problem Statements
-Tuliskan 2–4 pernyataan masalah yang jelas dan spesifik.
+<br> 1.Catatan kemunculan spesies flora dan fauna di Indonesia memiliki persebaran yang berbeda-beda berdasarkan wilayah dan tahun pengamatan. <br> 2.Diperlukan analisis untuk mengetahui karakteristik keanekaragaman spesies yang tercatat pada setiap wilayah berdasarkan jumlah catatan, jumlah spesies, dan kelompok organisme. <br> 3.Belum dilakukan pengelompokan wilayah berdasarkan kesamaan karakteristik catatan kemunculan spesies menggunakan pendekatan clustering pada rancangan project ini.
 
 **Contoh (universal):**
 1. Model perlu mampu memprediksi nilai target dengan akurasi tinggi
@@ -111,9 +115,9 @@ Rumuskan masalah dalam kerangka *Learning Problem*:
 
 | Komponen | Pertanyaan Panduan | Jawaban Anda |
 |----------|--------------------|--------------|
-| **Target** | Apa yang diprediksi? Jenis tugas (klasifikasi biner/multikelas, regresi, forecasting, clustering, dll.)? | [ ... ] |
-| **Objective** | Apa yang dioptimalkan/diminimalkan secara matematis (misal: cross-entropy, MSE)? Metrik keberhasilan utama? | [ ... ] |
-| **Data** | Sumber, ukuran, jenis, dan asumsi tentang data (i.i.d.? distribusi train vs test?) | [ ... ] |
+| **Target** | Apa yang diprediksi? Jenis tugas (klasifikasi biner/multikelas, regresi, forecasting, clustering, dll.)? | Menghasilkan label cluster yang menunjukkan kelompok unit wilayah berdasarkan kesamaan karakteristik catatan kemunculan spesies. Setiap unit data mewakili satu grid geografis pada satu tahun pengamatan. |
+| **Objective** | Apa yang dioptimalkan/diminimalkan secara matematis (misal: cross-entropy, MSE)? Metrik keberhasilan utama? | Memperoleh kelompok data dengan karakteristik yang mirip di dalam cluster dan perbedaan yang baik antarcluster. Model dievaluasi menggunakan Silhouette Score, Davies-Bouldin Index, dan Calinski-Harabasz Score. |
+| **Data** | Sumber, ukuran, jenis, dan asumsi tentang data (i.i.d.? distribusi train vs test?) | Data kemunculan spesies dari GBIF Indonesia dengan atribut nama spesies, kelompok taksonomi, tahun pengamatan, latitude, dan longitude. Data mentah akan diolah menjadi data tabular berdasarkan grid wilayah dan tahun pengamatan. |
 
 ### 3.3 Goals
 
