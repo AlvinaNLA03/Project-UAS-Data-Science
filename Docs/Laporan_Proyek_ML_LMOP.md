@@ -204,41 +204,55 @@ Model deep learning yang sesuai dengan jenis data.
 ## 4. DATA UNDERSTANDING  **[L]**
 ### 4.1 Informasi Dataset
 **Sumber Dataset:**  
-[Sebutkan sumber: Kaggle, UCI ML Repository, atau sumber lain dengan URL]
+[https://www.gbif.org/occurrence/search?country=ID&has_coordinate=true]
 
 **Deskripsi Dataset:**
-- Jumlah baris (rows): [angka]
-- Jumlah kolom (columns/features): [angka]
-- Tipe data: [Tabular / Image / Text / Time Series / Audio / Video]
-- Ukuran dataset: [MB/GB]
-- Format file: [CSV / JSON / Images / TXT / etc.]
+- Jumlah baris (rows): 2.022.875
+- Jumlah kolom (columns/features): 50
+- Tipe data: Tabular
+- Ukuran dataset: 240 MB
+- Format file: CSV 
 
 ### 4.2 Deskripsi Fitur
 Jelaskan setiap fitur/kolom yang ada dalam dataset.
 **Contoh tabel:**
 | Nama Fitur | Tipe Data | Deskripsi | Contoh Nilai |
 |------------|-----------|-----------|--------------|
-| id | Integer | ID unik data | 1, 2, 3 |
-| age | Integer | Usia (tahun) | 25, 30, 45 |
-| income | Float | Pendapatan (juta) | 5.5, 10.2 |
-| category | Categorical | Kategori produk | A, B, C |
-| text | String | Teks ulasan | "Produk bagus..." |
-| image | Image | Citra 224x224 RGB | Array 224x224x3 |
-| label | Categorical | Label target | 0, 1 atau "positif", "negatif" |
-
+| gbifID | Integer | Identitas unik catatan kemunculan spesies. |1,2,3 |
+| kingdom | Categorical | Kelompok taksonomi tingkat kingdom, digunakan untuk komposisi organisme. | Animalia, Plantae |
+| phylum | Categorical | Filum organisme, informasi taksonomi pendukung. | Chordata, Tracheophyta |
+| class | Categorical | Kelas taksonomi, digunakan untuk deskripsi dan penghitungan jumlah kelas unik. | Aves, Magnoliopsida |
+| order | Categorical | Ordo organisme,informasi taksonomi pendukung. | Magnoliales, Coraciiformes, Charadriiformes, Passeriformes, Galliformes  |
+| family | Categorical | Famili organisme,digunakan menghitung kekayaan famili. | Annonaceae, Alcedinidae, Turnicidae, Rhipiduridae, Phasianidae  |
+| genus | Categorical | Label target | Disepalum, Todiramphus, Turnix, Rhipidura, Arborophila  |
+| species | Categorical | Nama spesies organisme yang tercatat dalam dataset | Disepalum rawagambut, Todiramphus chloris, Turnix suscitator, Rhipidura leucophrys, Arborophila javanica |
+| taxonRank | Categorical | ingkat taksonomi dari catatan, digunakan untuk memilih catatan tingkat spesies. | SPECIES |
+| countryCode | Categorical | Kode negara tempat catatan organisme berasal. | ID |
+| stateProvince | Categorical | Informasi provinsi atau wilayah administratif dari catatan GBIF. | Sumatera Province, Sulawesi, Maluku, Jawa |
+| occurrenceStatus | Categorical  | Status kemunculan organisme pada catatan. | DETECTED |
+| decimalLatitude | Float | Koordinat lintang lokasi pengamatan. | -1.771, 0.473, -0.414, 0.915, -7.159 |
+| decimalLongitude | Float | Koordinat bujur lokasi pengamatan. | 104.202, 121.437, 121.866, 127.548, 107.431 |
+| coordinateUncertaintyInMeters | Float | Perkiraan tingkat ketidakpastian koordinat dalam satuan meter. | 100.0 (jika tersedia) |
+| depth | Float | Kedalaman lokasi jika dicatat, dapat membantu mengidentifikasi catatan perairan. | tidak tersedia |
+| day | Float | Hari saat pengamatan atau pencatatan dilakukan. | 30.000, 28.000, 18.000, 24.000, 18.000 |
+| month | Float | Bulan saat pengamatan atau pencatatan dilakukan. | 11.000, 10.000, 6.000, 5.000 |
+| year | Integer | Tahun pengamatan, digunakan untuk analisis temporal. | 2020, 2023 |
+| basisOfRecord | Categorical | Dasar atau jenis bukti pencatatan organisme. | MATERIAL_CITATION, HUMAN_OBSERVATION |
+| individualCount | Float | Jumlah individu jika dicatat oleh sumber data. | 1.000, 2.000, 3.000 |
+| issue | Categorical | Penanda isu kualitas data dari GBIF jika tersedia. | OCCURRENCE_STATUS_INFERRED_FROM_INDIVIDUAL_COUNT;GEODETIC_DATUM_ASSUMED_WGS84;CONTINENT_DERIVED_... ,COORDINATE_ROUNDED;GEODETIC_DATUM_ASSUMED_WGS84;CONTINENT_DERIVED_FROM_COORDINATES;TAXON_CONCEPT... |
 **[Buat tabel deskripsi fitur Anda di sini]**
 
 ### 4.3 Kondisi Data
 
 Jelaskan kondisi dan permasalahan data:
 
-- **Missing Values:** [Ada/Tidak, berapa persen?]
-- **Duplicate Data:** [Ada/Tidak, berapa banyak?]
-- **Outliers:** [Ada/Tidak, pada fitur apa?]
-- **Imbalanced Data:** [Ada/Tidak, rasio kelas?]
-- **Noise:** [Jelaskan jika ada]
-- **Data Quality Issues:** [Jelaskan jika ada masalah lain]
-- **Asumsi Data (i.i.d., distribusi train-test, potensi data leakage):** [Jelaskan]
+- **Missing Values:** Ada, Terdapat missing values pada beberapa kolom. Nilai kosong tertinggi terdapat pada kolom depth sebesar 99,56%, coordinateUncertaintyInMeters sebesar 79,37%, dan individualCount sebesar 42,51%.
+- **Duplicate Data:** Tidak, Jumlah duplikat pada kedua pemeriksaan adalah 0.
+- **Outliers:** Ada, ditemukan nilai ekstrem (outliers) pada kolom individualCount sebanyak 108.101 data, dengan batas atas IQR sebesar 8,50. Nilai tersebut menunjukkan adanya catatan dengan jumlah individu yang jauh lebih tinggi dibandingkan sebagian besar data lainnya. Namun, nilai ekstrem tidak otomatis dihapus karena masih berpotensi memberikan informasi yang relevan. Kolom individualCount juga tidak digunakan sebagai fitur utama dalam proses clustering.
+- **Imbalanced Data:** Ada, Kingdom Animalia mendominasi dengan 1.809.359 catatan (89,44%), sedangkan kingdom lainnya sebesar 10,56%. Rasio kelas target tidak diterapkan karena penelitian menggunakan metode clustering.
+- **Noise:** Terdapat potensi noise berupa informasi yang tidak lengkap, terutama pada kolom depth (99,56%), coordinateUncertaintyInMeters (79,37%), dan individualCount (42,51%).
+- **Data Quality Issues:** Terdapat beberapa kolom dengan data kosong, terutama depth, coordinateUncertaintyInMeters, dan individualCount. Selain itu, jumlah catatan antar-kelompok taksonomi tidak merata. Namun, tidak ditemukan data duplikat maupun kesalahan pada koordinat dan rentang tahun yang diperiksa.
+- **Asumsi Data (i.i.d., distribusi train-test, potensi data leakage):** Data dibagi menggunakan GroupShuffleSplit berdasarkan blok spasial untuk menghindari kemiripan lokasi. Imputasi dan standardisasi hanya menggunakan data training guna mencegah data leakage.
 
 ### 4.4 Exploratory Data Analysis (EDA) - (**OPSIONAL**)
 
