@@ -270,25 +270,26 @@ Jelaskan kondisi dan permasalahan data:
 - Class distribution plot
 
 
-#### Visualisasi 1: [Judul Visualisasi]
-[Insert gambar/plot]
+#### Visualisasi 1: Tren jumlah catatan kemunculan spesies
+<img src="/IMG/Tren jumlah catatan kemunculan spesies.png" width="300" alt="grafik">
 
 **Insight:**  
-[Jelaskan apa yang dapat dipelajari dari visualisasi ini]
+Grafik menunjukkan bahwa jumlah catatan kemunculan spesies mengalami perubahan selama periode 2015–2025. Kenaikan jumlah catatan pada tahun tertentu menunjukkan meningkatnya dokumentasi keanekaragaman hayati, sedangkan penurunan menunjukkan berkurangnya catatan yang tercatat pada tahun tersebut. Hal ini menggambarkan bahwa intensitas pendataan keanekaragaman hayati di Indonesia berbeda-beda setiap tahunnya, bukan menunjukkan perubahan jumlah populasi spesies secara langsung.
 
-#### Visualisasi 2: [Judul Visualisasi]
+#### Visualisasi 2: Grafik kelas taksonomi
 
-[Insert gambar/plot]
-
-**Insight:**  
-[Jelaskan apa yang dapat dipelajari dari visualisasi ini]
-
-#### Visualisasi 3: [Judul Visualisasi]
-
-[Insert gambar/plot]
+<img src="/IMG/Grafik_10 kelas taksonomi.png" width="300" alt="grafik">
 
 **Insight:**  
-[Jelaskan apa yang dapat dipelajari dari visualisasi ini]
+Grafik menunjukkan bahwa catatan keanekaragaman hayati paling banyak berasal dari kelas Aves, diikuti oleh Insecta dan Teleostei. Hal ini menunjukkan bahwa dokumentasi keanekaragaman hayati dalam dataset GBIF Indonesia lebih banyak ditemukan pada kelompok burung, serangga, dan ikan. Sementara itu, kelas lainnya memiliki jumlah catatan yang lebih sedikit sehingga persebaran dokumentasi antar kelas taksonomi belum merata.
+
+#### Visualisasi 3: Grafik nilai stateProvince
+
+<img src="/IMG/Grafik_15 nilai stateProvince.png" width="300" alt="grafik">
+
+
+**Insight:**  
+Grafik memperlihatkan bahwa jumlah data keanekaragaman hayati di setiap wilayah berbeda-beda. Ada wilayah yang memiliki catatan lebih banyak, sementara wilayah lainnya memiliki catatan yang lebih sedikit. Artinya, pendataan keanekaragaman hayati belum merata di seluruh wilayah Indonesia. Namun, nama wilayah pada dataset tetap perlu diperiksa karena belum tentu semuanya menggunakan nama provinsi resmi.
 
 ---
 
