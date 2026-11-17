@@ -4,7 +4,7 @@
 **Judul Proyek:**  
 [(Contoh: "Klasifikasi Penyakit Daun Menggunakan CNN", "Prediksi Harga Rumah dengan Machine Learning", "Analisis Sentimen Ulasan Produk")]
 
-**Nama Mahasiswa:** <br> 1.Alvina L.A <br> 2.Julyo Firnanda <br> 3.Nadia Tifara S   
+**Nama Mahasiswa:** <br> 1.Alvina Nur L.A <br> 2.Julyo Firnanda <br> 3.Nadia Tifara S   
 **NIM:** <br> (244311003) <br> (244311016) <br> (244311022)  
 **Program Studi:** Teknologi Informasi / Rekayasa Perangkat Lunak  
 **Mata Kuliah:** Data Science  
@@ -295,98 +295,76 @@ Grafik memperlihatkan bahwa jumlah data keanekaragaman hayati di setiap wilayah 
 
 ## 5. DATA PREPARATION  **[L]**
 
-Bagian ini menjelaskan **semua** proses transformasi dan preprocessing data yang dilakukan.
-### 5.1 Data Cleaning
-**Aktivitas:**
-- Handling missing values
-- Removing duplicates
-- Handling outliers
-- Data type conversion
-**Contoh:**
-```
-Missing Values:
-- Fitur 'age' memiliki 50 missing values (5% dari data)
-- Strategi: Imputasi dengan median karena distribusi skewed
-- Alasan: Median lebih robust terhadap outliers dibanding mean
-```
+Data cleaning dilakukan pada catatan kemunculan GBIF sebelum catatan dikelompokkan menjadi unit grid-tahun. Notebook memilih kolom yang diperlukan untuk identitas catatan, taksonomi, negara, status kemunculan, koordinat, tahun, ketidakpastian koordinat, dan kedalaman. Setelah data dibaca, proses pembersihan dilakukan sebagai berikut.
 
-**[Jelaskan langkah-langkah data cleaning yang Anda lakukan]**
+1. **Handling missing values (penanganan nilai kosong).** Kolom `species`, `decimalLatitude`, `decimalLongitude`, dan `year` merupakan kolom inti. Baris yang tidak memiliki salah satu nilai tersebut dihapus dengan `dropna()`, dan nama spesies yang kosong setelah `strip()` juga dihapus. Sementara itu, nilai kosong pada `kingdom`, `class`, dan `family` tidak langsung menghapus baris, tetapi diisi dengan label `Unknown` agar informasi catatan tetap dapat digunakan saat agregasi. Kolom `depth` memiliki **5.824 nilai terisi** dan **1.683.733 nilai kosong** (sekitar **99,66%** kosong dari 1.689.557 catatan setelah cleaning). Kolom `depth` tidak dipakai sebagai fitur clustering sehingga nilai kosongnya tidak diimputasi. Jika terdapat nilai kosong atau tak hingga pada sembilan fitur numerik model, penanganannya dilakukan pada tahap transformasi dengan median imputer yang di-fit hanya pada data training (Subbab 5.3).
+2. **Removing duplicates (penghapusan duplikasi).** Duplikasi dihapus berdasarkan identitas unik `gbifID` menggunakan `drop_duplicates(subset='gbifID', keep='first')`. Dengan demikian, satu ID catatan hanya dipertahankan satu kali dan kemunculan pertama dipilih. Notebook juga menyusun `cleaning_log.csv` untuk mencatat jumlah baris yang dikeluarkan pada setiap tahap. Namun, angka penghapusan per tahap tidak terlihat pada ekspor HTML Colab yang tersedia sehingga tidak dicantumkan sebagai angka dalam laporan.
+3. **Handling outliers (pemeriksaan pencilan).** Notebook tidak menerapkan metode deteksi pencilan statistik seperti IQR atau Z-score. Penanganan yang dilakukan berupa pemeriksaan batas koordinat global: latitude harus berada pada rentang −90 sampai 90 dan longitude pada rentang −180 sampai 180. Tahun juga dibatasi pada periode penelitian **2015–2025**. Output notebook menunjukkan rentang latitude setelah cleaning sebesar **−49,345 sampai 19,43845** dan longitude **−155,88567 sampai 144,9**. Walaupun rentang tersebut berada dalam batas koordinat global, rentangnya belum membuktikan bahwa seluruh titik benar-benar berada di daratan Indonesia. Notebook mencatat bahwa `countryCode = ID` bukan pengganti pemeriksaan poligon daratan; verifikasi lanjutan dengan batas pulau/daratan Indonesia masih diperlukan. Jadi, laporan ini tidak menyatakan bahwa pencilan geografis sudah sepenuhnya dihapus.
+4. **Data type conversion (konversi tipe data).** Kolom teks seperti `kingdom`, `class`, `family`, `species`, `taxonRank`, `countryCode`, `occurrenceStatus`, dan `basisOfRecord` diubah menjadi tipe string dan dirapikan menggunakan `strip()` untuk menghilangkan spasi di awal maupun akhir. Kolom `decimalLatitude`, `decimalLongitude`, `year`, `coordinateUncertaintyInMeters`, dan `depth` dikonversi ke tipe numerik menggunakan `pd.to_numeric(errors='coerce')`. Nilai yang tidak dapat dikonversi akan menjadi `NaN` dan kemudian ditangani sesuai aturan kelengkapan data. Setelah penyaringan rentang tahun, kolom `year` diubah menjadi integer.
+5. **Penyaringan catatan.** Jika kolom tersedia, catatan dibatasi pada `countryCode = ID`. Jika nilai `PRESENT` terdapat pada kolom `occurrenceStatus`, hanya catatan dengan status `PRESENT` yang dipertahankan. Jika `taxonRank` tersedia, hanya catatan dengan tingkat taksonomi `SPECIES` yang digunakan. Selain itu, baris dengan nama spesies kosong, koordinat di luar batas global, atau tahun di luar periode kajian dihapus.
+
+Dengan aturan tersebut, notebook menjaga agar catatan yang digunakan memiliki informasi spesies, koordinat, dan tahun yang diperlukan untuk pembentukan grid. Nilai taksonomi yang kosong tetap dipertahankan sebagai `Unknown`, sedangkan kolom `depth` yang sangat banyak kosong dibiarkan karena tidak termasuk fitur model.
 
 ### 5.2 Feature Engineering
-**Aktivitas:**
-- Creating new features
-- Feature extraction
-- Feature selection
-- Dimensionality reduction
+Data cleaning dilakukan pada catatan kemunculan GBIF sebelum catatan dikelompokkan menjadi unit grid-tahun. Notebook memilih kolom yang diperlukan untuk identitas catatan, taksonomi, negara, status kemunculan, koordinat, tahun, ketidakpastian koordinat, dan kedalaman. Setelah data dibaca, proses pembersihan dilakukan sebagai berikut.
 
-**[Jelaskan feature engineering yang Anda lakukan]**
+1. **Handling missing values (penanganan nilai kosong).** Kolom `species`, `decimalLatitude`, `decimalLongitude`, dan `year` merupakan kolom inti. Baris yang tidak memiliki salah satu nilai tersebut dihapus dengan `dropna()`, dan nama spesies yang kosong setelah `strip()` juga dihapus. Sementara itu, nilai kosong pada `kingdom`, `class`, dan `family` tidak langsung menghapus baris, tetapi diisi dengan label `Unknown` agar informasi catatan tetap dapat digunakan saat agregasi. Kolom `depth` memiliki **5.824 nilai terisi** dan **1.683.733 nilai kosong** (sekitar **99,66%** kosong dari 1.689.557 catatan setelah cleaning). Kolom `depth` tidak dipakai sebagai fitur clustering sehingga nilai kosongnya tidak diimputasi. Jika terdapat nilai kosong atau tak hingga pada sembilan fitur numerik model, penanganannya dilakukan pada tahap transformasi dengan median imputer yang di-fit hanya pada data training (Subbab 5.3).
+2. **Removing duplicates (penghapusan duplikasi).** Duplikasi dihapus berdasarkan identitas unik `gbifID` menggunakan `drop_duplicates(subset='gbifID', keep='first')`. Dengan demikian, satu ID catatan hanya dipertahankan satu kali dan kemunculan pertama dipilih. Notebook juga menyusun `cleaning_log.csv` untuk mencatat jumlah baris yang dikeluarkan pada setiap tahap. Namun, angka penghapusan per tahap tidak terlihat pada ekspor HTML Colab yang tersedia sehingga tidak dicantumkan sebagai angka dalam laporan.
+3. **Handling outliers (pemeriksaan pencilan).** Notebook tidak menerapkan metode deteksi pencilan statistik seperti IQR atau Z-score. Penanganan yang dilakukan berupa pemeriksaan batas koordinat global: latitude harus berada pada rentang −90 sampai 90 dan longitude pada rentang −180 sampai 180. Tahun juga dibatasi pada periode penelitian **2015–2025**. Output notebook menunjukkan rentang latitude setelah cleaning sebesar **−49,345 sampai 19,43845** dan longitude **−155,88567 sampai 144,9**. Walaupun rentang tersebut berada dalam batas koordinat global, rentangnya belum membuktikan bahwa seluruh titik benar-benar berada di daratan Indonesia. Notebook mencatat bahwa `countryCode = ID` bukan pengganti pemeriksaan poligon daratan; verifikasi lanjutan dengan batas pulau/daratan Indonesia masih diperlukan. Jadi, laporan ini tidak menyatakan bahwa pencilan geografis sudah sepenuhnya dihapus.
+4. **Data type conversion (konversi tipe data).** Kolom teks seperti `kingdom`, `class`, `family`, `species`, `taxonRank`, `countryCode`, `occurrenceStatus`, dan `basisOfRecord` diubah menjadi tipe string dan dirapikan menggunakan `strip()` untuk menghilangkan spasi di awal maupun akhir. Kolom `decimalLatitude`, `decimalLongitude`, `year`, `coordinateUncertaintyInMeters`, dan `depth` dikonversi ke tipe numerik menggunakan `pd.to_numeric(errors='coerce')`. Nilai yang tidak dapat dikonversi akan menjadi `NaN` dan kemudian ditangani sesuai aturan kelengkapan data. Setelah penyaringan rentang tahun, kolom `year` diubah menjadi integer.
+5. **Penyaringan catatan.** Jika kolom tersedia, catatan dibatasi pada `countryCode = ID`. Jika nilai `PRESENT` terdapat pada kolom `occurrenceStatus`, hanya catatan dengan status `PRESENT` yang dipertahankan. Jika `taxonRank` tersedia, hanya catatan dengan tingkat taksonomi `SPECIES` yang digunakan. Selain itu, baris dengan nama spesies kosong, koordinat di luar batas global, atau tahun di luar periode kajian dihapus.
+
+Dengan aturan tersebut, notebook menjaga agar catatan yang digunakan memiliki informasi spesies, koordinat, dan tahun yang diperlukan untuk pembentukan grid. Nilai taksonomi yang kosong tetap dipertahankan sebagai `Unknown`, sedangkan kolom `depth` yang sangat banyak kosong dibiarkan karena tidak termasuk fitur model.
 
 ### 5.3 Data Transformation
 
-**Untuk Data Tabular:**
-- Encoding (Label Encoding, One-Hot Encoding, Ordinal Encoding)
-- Scaling (Standardization, Normalization, MinMaxScaler)
+Transformasi dilakukan agar fitur memiliki bentuk dan skala yang sesuai untuk K-Means, Gaussian Mixture Model (GMM), dan Deep Embedded Clustering (DEC).
 
-**Untuk Data Text:**
-- Tokenization
-- Lowercasing
-- Removing punctuation/stopwords
-- Stemming/Lemmatization
-- Padding sequences
-- Word embedding (Word2Vec, GloVe, fastText)
+1. **Encoding kategori.** Notebook tidak menerapkan Label Encoding atau One-Hot Encoding sebagai langkah terpisah pada input model. Informasi kategori kingdom terlebih dahulu diringkas menjadi lima proporsi numerik melalui tabulasi silang (`pd.crosstab`), sehingga dapat digunakan sebagai fitur clustering.
+2. **Log transformation.** Empat fitur hitungan, yaitu `total_records`, `species_richness`, `family_richness`, dan `class_richness`, ditransformasi menggunakan `np.log1p()`. Transformasi ini mengurangi kemencengan distribusi pada fitur hitungan.
+3. **Pemeriksaan nilai tak hingga.** Nilai `inf` dan `-inf` pada matriks fitur diganti menjadi `NaN` agar dapat ditangani pada tahap imputasi.
+4. **Imputasi missing value.** `SimpleImputer(strategy='median')` digunakan untuk mengganti nilai kosong pada fitur numerik dengan median fitur dari data training.
+5. **Standardisasi.** `StandardScaler` digunakan untuk menstandardisasi sembilan fitur agar perbedaan skala tidak membuat fitur dengan rentang besar mendominasi perhitungan jarak atau pembentukan cluster.
+6. **Pencegahan data leakage.** Imputer dan scaler hanya di-fit pada data training. Data validation dan test hanya menjalani `transform()` menggunakan parameter yang diperoleh dari training. Tidak ada MinMaxScaler atau normalisasi min-max pada notebook ini.
 
-**Untuk Data Image:**
-- Resizing
-- Normalization (pixel values 0-1 atau -1 to 1)
-- Data augmentation (rotation, flip, zoom, brightness, etc.)
-- Color space conversion
-
-**Untuk Time Series:**
-- Creating time windows
-- Lag features
-- Rolling statistics
-- Differencing
-
-**[Jelaskan transformasi yang Anda lakukan]**
+Setelah transformasi, ukuran matriks yang dihasilkan adalah training **(4.744, 9)**, validation **(1.505, 9)**, dan test **(1.216, 9)**.
 
 ### 5.4 Data Splitting
 
-**Strategi pembagian data:**
-```
-- Training set: [X]% ([jumlah] samples)
-- Validation set: [X]% ([jumlah] samples) - jika ada
-- Test set: [X]% ([jumlah] samples)
-```
-**Contoh:**
-```
-Menggunakan stratified split untuk mempertahankan distribusi kelas:
-- Training: 80% (8000 samples)
-- Test: 20% (2000 samples)
-- Random state: 42 untuk reproducibility
-```
+Pembagian data menggunakan **GroupShuffleSplit** berdasarkan blok spasial, bukan random split per baris atau stratified split. Strategi ini dipilih karena proyek merupakan unsupervised learning tanpa label kelas target dan karena grid yang berdekatan sebaiknya tidak tersebar ke subset yang berbeda.
+
+Blok geografis dibentuk dari titik tengah grid menggunakan ukuran blok **2°**. Notebook menjalankan pembagian pertama dengan `test_size=0.30` dan `random_state=42`, sehingga sekitar 70% sampel masuk training dan 30% menjadi data sementara. Data sementara kemudian dibagi dua dengan `test_size=0.50` menjadi validation dan test. Karena pemisahan dilakukan berdasarkan kelompok blok spasial, persentase aktual mengikuti jumlah anggota blok dan tidak harus tepat sama dengan rasio nominal.
+
+| Subset | Jumlah sampel | Persentase aktual |
+|---|---:|---:|
+| Training | 4.744 | 63,55% |
+| Validation | 1.505 | 20,16% |
+| Test | 1.216 | 16,29% |
+| **Total** | **7.465** | **100,00%** |
+
+Notebook memvalidasi bahwa blok spasial pada training, validation, dan test tidak saling tumpang tindih. `random_state=42` digunakan agar pembagian dapat direproduksi. Test set disimpan untuk evaluasi akhir pada tahap evaluasi model; validation digunakan untuk pengembangan atau pemilihan model pada tahap berikutnya.
 
 > **Penting:** Test set hanya digunakan **sekali** pada tahap P (evaluasi akhir). Tuning pada tahap O hanya boleh memakai validation set / cross-validation. Fit scaler/encoder hanya pada data training untuk menghindari data leakage.
 
-**[Jelaskan strategi splitting Anda dan alasannya]**
-
 ### 5.5 Data Balancing (jika diperlukan)
-**Teknik yang digunakan:**
-- SMOTE (Synthetic Minority Over-sampling Technique)
-- Random Undersampling
-- Class weights
-- Ensemble sampling
+**Data balancing tidak diterapkan.** Proyek menggunakan unsupervised learning untuk clustering dan tidak memiliki label kelas target yang perlu diseimbangkan. Oleh sebab itu, teknik seperti SMOTE, random oversampling, dan random undersampling tidak digunakan.
 
-**[Jelaskan jika Anda melakukan data balancing]**
+Perbedaan jumlah catatan antarwilayah dipertahankan karena dapat menjadi karakteristik intensitas dokumentasi biodiversitas pada suatu grid-tahun. Rentang fitur hitungan ditangani melalui transformasi `log1p()` dan standardisasi, bukan dengan mengubah jumlah sampel antarwilayah.
 
 ### 5.6 Ringkasan Data Preparation
 
-**Per langkah, jelaskan:**
-1. **Apa** yang dilakukan
-**[Jelaskan ]**
-2. **Mengapa** penting
-**[Jelaskan Mengapa ?]**
-3. **Bagaimana** implementasinya
-**[Jelaskan Bagaimana]**
+| Komponen | Apa yang dilakukan | Mengapa penting | Bagaimana implementasinya |
+|---|---|---|---|
+| Data cleaning | Menangani nilai kosong, menghapus duplikasi `gbifID`, memeriksa pencilan koordinat/tahun, mengonversi tipe data, dan menyaring catatan Indonesia berstatus sesuai kriteria | Menjaga catatan yang masuk ke agregasi tetap lengkap dan konsisten; mencegah data kosong atau tidak valid merusak pembentukan grid | Pandas: `fillna("Unknown")`, `dropna()`, `drop_duplicates(subset="gbifID")`, `pd.to_numeric(errors="coerce")`, `strip()`, serta filter negara, status, taxon rank, koordinat, dan tahun |
+| Feature engineering | Membentuk grid 0,5° dan agregasi grid-tahun; membuat fitur jumlah, kekayaan taksonomi, serta proporsi kingdom | Mengubah catatan individual menjadi unit analisis numerik yang sesuai untuk clustering | NumPy dan Pandas: `floor()`, `groupby().agg()`, `pd.crosstab()`, serta seleksi 9 fitur |
+| Data transformation | Mengubah skala hitungan, mengimputasi missing value, dan menstandardisasi fitur | Mengurangi kemencengan distribusi, menangani nilai kosong, dan menyetarakan skala fitur | `np.log1p()`, `SimpleImputer(strategy='median')`, dan `StandardScaler()`; fit hanya pada training |
+| Data splitting | Membagi unit grid-tahun menjadi training, validation, dan test berdasarkan blok spasial 2° | Mengurangi kebocoran informasi spasial antar subset dan menyediakan data untuk pengembangan serta evaluasi | `GroupShuffleSplit`, `random_state=42`, serta pemeriksaan irisan blok antar subset |
+| Data balancing | Tidak melakukan balancing | Tidak ada label kelas target pada clustering; distribusi asli catatan dipertahankan | Tidak menggunakan SMOTE, oversampling, atau undersampling |
+
+**Kesimpulan.** Data preparation menghasilkan 7.465 unit grid-tahun dengan sembilan fitur numerik untuk proses clustering. Data telah dibersihkan, diagregasi, ditransformasi dengan `log1p()`, diimputasi menggunakan median, distandardisasi, dan dibagi berdasarkan blok spasial. Hasil preprocessing disimpan dalam bentuk file CSV, matriks fitur `.npy`, objek imputer dan scaler, daftar fitur, ringkasan split, serta log cleaning agar dapat digunakan kembali pada tahap Model Design.
+
+**Catatan interpretasi.** `total_records` menunjukkan jumlah catatan kemunculan yang terdokumentasi pada GBIF, bukan jumlah populasi individu spesies di alam. Selain itu, koordinat perlu diverifikasi menggunakan poligon daratan Indonesia sebelum kesimpulan berbasis peta dibuat.
+
 
 ---
 
