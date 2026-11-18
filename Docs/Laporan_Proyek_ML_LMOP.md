@@ -6,7 +6,7 @@
 
 **Nama Mahasiswa:** <br> 1.Alvina Nur L.A <br> 2.Julyo Firnanda <br> 3.Nadia Tifara S   
 **NIM:** <br> (244311003) <br> (244311016) <br> (244311022)  
-**Program Studi:** Teknologi Informasi / Rekayasa Perangkat Lunak  
+**Program Studi:** Rekayasa Perangkat Lunak  
 **Mata Kuliah:** Data Science  
 **Dosen Pengampu:** Gus Nanang Syaifuddiin S.Kom,M.Kom  
 **Tahun Akademik:** 2026/5  
