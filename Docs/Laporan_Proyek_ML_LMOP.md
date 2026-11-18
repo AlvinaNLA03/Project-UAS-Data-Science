@@ -224,7 +224,7 @@ Jelaskan setiap fitur/kolom yang ada dalam dataset.
 | class | Categorical | Kelas taksonomi, digunakan untuk deskripsi dan penghitungan jumlah kelas unik. | Aves, Magnoliopsida |
 | order | Categorical | Ordo organisme,informasi taksonomi pendukung. | Magnoliales, Coraciiformes, Charadriiformes, Passeriformes, Galliformes  |
 | family | Categorical | Famili organisme,digunakan menghitung kekayaan famili. | Annonaceae, Alcedinidae, Turnicidae, Rhipiduridae, Phasianidae  |
-| genus | Categorical | Label target | Disepalum, Todiramphus, Turnix, Rhipidura, Arborophila  |
+| genus | Categorical | Genus (marga) organisme, tingkat taksonomi di bawah famili dan di atas spesies. Informasi taksonomi pendukung | Disepalum, Todiramphus, Turnix, Rhipidura, Arborophila  |
 | species | Categorical | Nama spesies organisme yang tercatat dalam dataset | Disepalum rawagambut, Todiramphus chloris, Turnix suscitator, Rhipidura leucophrys, Arborophila javanica |
 | taxonRank | Categorical | ingkat taksonomi dari catatan, digunakan untuk memilih catatan tingkat spesies. | SPECIES |
 | countryCode | Categorical | Kode negara tempat catatan organisme berasal. | ID |
