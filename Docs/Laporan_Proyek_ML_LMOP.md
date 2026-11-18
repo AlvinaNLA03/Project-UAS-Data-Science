@@ -347,9 +347,7 @@ Notebook memvalidasi bahwa blok spasial pada training, validation, dan test tida
 > **Penting:** Test set hanya digunakan **sekali** pada tahap P (evaluasi akhir). Tuning pada tahap O hanya boleh memakai validation set / cross-validation. Fit scaler/encoder hanya pada data training untuk menghindari data leakage.
 
 ### 5.5 Data Balancing (jika diperlukan)
-**Data balancing tidak diterapkan.** Proyek menggunakan unsupervised learning untuk clustering dan tidak memiliki label kelas target yang perlu diseimbangkan. Oleh sebab itu, teknik seperti SMOTE, random oversampling, dan random undersampling tidak digunakan.
 
-Perbedaan jumlah catatan antarwilayah dipertahankan karena dapat menjadi karakteristik intensitas dokumentasi biodiversitas pada suatu grid-tahun. Rentang fitur hitungan ditangani melalui transformasi `log1p()` dan standardisasi, bukan dengan mengubah jumlah sampel antarwilayah.
 
 ### 5.6 Ringkasan Data Preparation
 
