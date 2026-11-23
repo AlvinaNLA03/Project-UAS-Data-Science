@@ -418,38 +418,45 @@ y_pred_baseline = model_baseline.predict(X_test)
 
 #### 6.2.1 Deskripsi Model  **[M]**
 
-**Nama Model:** [Nama model, misal: Random Forest / XGBoost]  
+**Nama Model:** Gaussian Mixture Model (GMM)  
 **Teori Singkat:**  
-[Jelaskan bagaimana algoritma ini bekerja]
+Gaussian Mixture Model (GMM) merupakan algoritma unsupervised learning yang digunakan untuk mengelompokkan data berdasarkan kemiripan karakteristik. GMM menganggap data berasal dari gabungan beberapa distribusi Gaussian, sehingga setiap data memiliki probabilitas untuk masuk ke masing-masing cluster dan akan ditempatkan pada cluster dengan probabilitas tertinggi.
 
 **Alasan Pemilihan:**  
-[Mengapa memilih model ini?]
+GMM dipilih sebagai model advanced karena mampu mengelompokkan data dengan pola sebaran yang lebih fleksibel dibandingkan K-Means. Model ini juga dapat memberikan probabilitas keanggotaan setiap data terhadap cluster, sehingga hasil pengelompokan dapat dianalisis lebih lanjut.
 
 **Keunggulan:**
-- [Sebutkan keunggulan]
+- Dapat membentuk cluster dengan pola sebaran bentuk yang lebih fleksibel
+- Menghasilkan probabilitas keanggotaan data pada setiap cluster
+- Dapat digunakan untuk menemukan kelompok data berdasarkan karakteristik yang berbeda  
 
 **Kelemahan:**
-- [Sebutkan kelemahan]
+- Jumlah cluster harus ditentukan sebelum proses pelatihan
+- Memiliki asumsi bahwa data dapat direpresentasikan mengunakan distribusi Gaussian
+- Hasil clustering dapat dipengaruhi oleh pemilihan parameter dan proses inisialisasi
 
 #### 6.2.2 Hypothesis Space & Inductive Bias  **[M]**
 
-- **Model family / arsitektur:** [misal: ensemble pohon keputusan]
-- **Hypothesis space:** [fungsi non-linear piecewise, interaksi fitur otomatis, dll.]
-- **Inductive bias / asumsi:** [misal: data tabular dengan struktur ambang/threshold]
-- **Perbandingan dengan baseline:** [apa yang bisa dipelajari model ini yang tidak bisa baseline?]
+- **Model family / arsitektur:** Model probabilistik berbasis campuran distribusi Gaussian (Gaussian Mixture Model).
+- **Hypothesis space:** Kumpulan kemungkinan model yang dibentuk berdasarkan jumlah komponen Gaussian, bobot campuran, nilai rata-rata, dan matriks kovarians dari setiap komponen.
+- **Inductive bias / asumsi:** GMM mengasumsikan bahwa data dapat dikelompokkan berdasarkan gabungan beberapa distribusi Gaussian. Setiap cluster memiliki karakteristik distribusi tertentu yang digunakan untuk menentukan keanggotaan data.
+- **Perbandingan dengan baseline:** Dibandingkan K-Means yang mengelompokkan data berdasarkan jarak ke titik pusat (centroid), GMM menggunakan probabilitas dan matriks kovarians. Dengan demikian, GMM dapat menangkap pola cluster yang memiliki bentuk dan persebaran lebih beragam.
 
 #### 6.2.3 Implementasi (Ringkas)  **[M]**
 ```python
 # Contoh kode
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.mixture import GaussianMixture
 
-model_advanced = RandomForestClassifier(
-    n_estimators=100,
-    max_depth=10,
-    random_state=42
+model_advanced = GaussianMixture(
+    n_components=4,
+    covariance_type="full",
+    random_state=42,
+    max_iter=200
 )
-model_advanced.fit(X_train, y_train)
-y_pred_advanced = model_advanced.predict(X_test)
+
+model_advanced.fit(X_train)
+
+cluster_val = model_advanced.predict(X_val)
 ```
 
 #### 6.2.4 Optimization: Hyperparameter Tuning  **[O]**
@@ -457,25 +464,25 @@ y_pred_advanced = model_advanced.predict(X_test)
 **Parameter yang digunakan:**
 ```
 [Tuliskan parameter penting, contoh:]
-- n_estimators: 100
-- max_depth: 10
-- learning_rate: 0.1
-- min_samples_split: 2
+- n_components: 4
+- covariance_type: full
+- random_state: 42
+- max_iter: 200
 ```
 
 **Hyperparameter Tuning (WAJIB minimal 1 metode sederhana):**
-- Metode: [Grid Search / Random Search / Bayesian Optimization]
-- Search space: [rentang parameter yang dicoba]
-- Skema validasi: [k-fold CV / validation set]
-- Best parameters: [...]
-- Skor validasi sebelum vs sesudah tuning: [...]
+- Metode: Grid Search sederhana
+- Search space: n_components = 3, 4, 5 dan covariance_type = full, diag.
+- Skema validasi: Menggunakan validation set.
+- Best parameters: Belum diperoleh karena proses tuning belum dijalankan.
+- Skor validasi sebelum vs sesudah tuning: Diisi berdasarkan hasil evaluasi setelah proses tuning dijalankan.
 
 #### 6.2.5 Kontrol Overfitting  **[O]**
-[Jelaskan regularisasi/pembatasan kompleksitas yang dipakai, misal: max_depth, min_samples_leaf, early stopping pada boosting]
+Pengendalian kompleksitas model dilakukan dengan membatasi jumlah komponen Gaussian sebanyak empat dan menetapkan maksimum iterasi sebanyak 200. Selain itu, model hanya dilatih menggunakan data training, sedangkan data validation digunakan untuk mengevaluasi hasil clustering. Pembagian data berdasarkan blok geografis juga membantu mengurangi risiko kebocoran informasi antarwilayah.
 
 #### 6.2.6 Hasil Model  **[O → P]**
 
-**[Tuliskan hasil pada validation set; evaluasi akhir dijelaskan di Bab 7]**
+**Model Advanced GMM dilatih menggunakan data training dan kemudian diterapkan pada validation set untuk menghasilkan pengelompokan grid-tahun. Hasil prediksi menunjukkan kelompok wilayah berdasarkan kemiripan jumlah catatan, kekayaan taksonomi, serta komposisi kelompok kingdom.**
 
 ---
 
