@@ -484,6 +484,13 @@ Pengendalian kompleksitas model dilakukan dengan membatasi jumlah komponen Gauss
 
 **Model Advanced GMM dilatih menggunakan data training dan kemudian diterapkan pada validation set untuk menghasilkan pengelompokan grid-tahun. Hasil prediksi menunjukkan kelompok wilayah berdasarkan kemiripan jumlah catatan, kekayaan taksonomi, serta komposisi kelompok kingdom.**
 
+#### 6.2.7 Perbandingan Awal Model Baseline vs. Advanced
+
+| Model | Silhouette Score | Davies-Bouldin Index | Calinski-Harabasz Score |
+|---|---:|---:|---:|
+| K-Means Baseline | 0.5078 | 0.5290 | 1762.8210 |
+| GMM Advanced	 | 0.1945 | 1.1568 | 546.6199 |
+
 ---
 
 ### 6.3 Model 3 — Deep Learning Model (WAJIB)
