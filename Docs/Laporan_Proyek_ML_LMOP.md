@@ -411,6 +411,7 @@ J = Σₖ Σ_{x∈Cₖ} ‖x − μₖ‖²
 | `n_init` | 20 | Jumlah percobaan, dipilih hasil dengan inersia terkecil |
 | `max_iter` | 300 | Batas iterasi per percobaan |
 | `random_state` | 42 | Agar hasil dapat direproduksi |
+
 Tidak ada tuning hyperparameter. Konfigurasi di atas adalah pengaturan awal.
 #### 6.1.5 Hasil Awal  **[O → P]**
 
