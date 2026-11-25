@@ -374,45 +374,67 @@ Notebook memvalidasi bahwa blok spasial pada training, validation, dan test tida
 
 #### 6.1.1 Deskripsi Model  **[M]**
 
-**Nama Model:** [Nama model, misal: Logistic Regression]  
+**Nama Model:** K-Means Clustering (baseline) 
 **Teori Singkat:**  
-[Jelaskan secara singkat bagaimana model ini bekerja]  
+K-Means membagi data menjadi K cluster dengan meminimalkan jumlah kuadrat jarak Euclidean ke centroid cluster-nya.Lalu menetapkan setiap sampel ke centroid terdekat, dan menghitung ulang centroid sebagai rata-rata anggotanya, hingga konvergen. Karena hasil bergantung pada centroid awal, digunakan inisialisasi k-means++, yang memilih centroid awal agar saling berjauhan. Algoritma dijalankan 20 kali dengan inisialisasi berbeda, dan hasil dengan inersia terkecil dipilih 
 **Alasan Pemilihan:**  
-[Mengapa memilih model ini sebagai baseline?]
+karena sederhana, cepat, mudah dijelaskan, dan cocok sebagai pembanding awal untuk fitur numerik yang sudah distandarisasi.
 
 #### 6.1.2 Hypothesis Space & Inductive Bias  **[M]**
 
-- **Model family / arsitektur:** [misal: model linear]
-- **Hypothesis space:** [himpunan fungsi yang dapat direpresentasikan, misal: batas keputusan linear]
-- **Inductive bias / asumsi:** [misal: hubungan fitur-target linear, fitur independen]
-- **Implikasi terhadap dataset Anda:** [apakah asumsi cocok dengan data?]
+- **Model family / arsitektur:**clustering partisi (partitional), berbasis centroid, hard assignment, tanpa label (unsupervised).
+- **Hypothesis space:** semua pembagian ruang 9 fitur menjadi K = 4 wilayah. Setiap wilayah berbentuk sel Voronoi (konveks), dan batas antarcluster berupa bidang bisektor yang tegak lurus garis penghubung dua centroid
+- **Inductive bias / asumsi:** cluster kira-kira sferis dan kompak, berukuran serta berkepadatan relatif mirip; jarak Euclidean pada fitur terstandarisasi bermakna; setiap sampel masuk tepat satu cluster.
+- **Implikasi terhadap dataset Anda:** belum, karena ukuran cluster sangat timpang 148, 615, 2, dan 740 sampel.
 
 #### 6.1.3 Implementasi (Ringkas)  **[M]**
 ```python
-# Contoh kode (opsional, bisa dipindah ke GitHub)
-from sklearn.linear_model import LogisticRegression
+from sklearn.cluster import KMeans
 
-model_baseline = LogisticRegression(C=1.0, max_iter=100)
-model_baseline.fit(X_train, y_train)
-y_pred_baseline = model_baseline.predict(X_test)
+K = 4
+model = KMeans(n_clusters=K, init="k-means++", n_init=20,
+               max_iter=300, random_state=42)
+model.fit(X_train)              # hanya data training
+labels = model.predict(X_val) 
 ```
 
 #### 6.1.4 Optimization: Objective, Hyperparameter & Regularisasi  **[O]**
 
-**Objective/loss yang dioptimalkan:** [misal: log-loss + L2]  
-**Parameter yang digunakan:**
-```
-[Tuliskan parameter penting, contoh:]
-- C (regularization): 1.0
-- solver: 'lbfgs'
-- max_iter: 100
-```
+**Objective/loss yang dioptimalkan:** meminimalkan within-cluster sum of squares (inersia):
 
+J = Σₖ Σ_{x∈Cₖ} ‖x − μₖ‖² 
+**Parameter yang digunakan:**
+| Parameter | Nilai | Keterangan |
+|---|---|---|
+| `n_clusters` | 4 | Ditetapkan manual, belum diuji dengan pencarian K |
+| `init` | `k-means++` | Inisialisasi centroid awal |
+| `n_init` | 20 | Jumlah percobaan, dipilih hasil dengan inersia terkecil |
+| `max_iter` | 300 | Batas iterasi per percobaan |
+| `random_state` | 42 | Agar hasil dapat direproduksi |
+Tidak ada tuning hyperparameter. Konfigurasi di atas adalah pengaturan awal.
 #### 6.1.5 Hasil Awal  **[O → P]**
 
-**[Tuliskan hasil awal pada validation set; evaluasi akhir pada test set dijelaskan di Bab 7]**
+Evaluasi dilakukan pada validation set (1505 grid-tahun) setelah model dilatih pada training set (4744 grid-tahun).
 
----
+| Metrik | Nilai | Arah yang lebih baik |
+|---|---|---|
+| Silhouette | 0.5078 | Makin tinggi makin baik |
+| Davies-Bouldin | 0.5290 | Makin rendah makin baik |
+| Calinski-Harabasz | 1762.821 | Makin tinggi makin baik |
+
+Inersia pada data training: 17123.239
+
+### Distribusi Cluster pada Validation Set
+
+| Cluster | Jumlah grid-tahun | Persentase |
+|---|---|---|
+| 0 | 148 | 9.8% |
+| 1 | 615 | 40.9% |
+| 2 | 2 | 0.1% |
+| 3 | 740 | 49.2% |
+| **Total** | **1505** | **100%** |
+
+Silhouette 0,5078 berada di perbatasan antara kategori "lemah" (0,26–0,50) dan "cukup" (0,51–0,70) menurut skala rule-of-thumb Kaufman & Rousseeuw (1990). Nilai ini belum menunjukkan pemisahan cluster yang kuat. Davies-Bouldin (Davies & Bouldin, 1979) dan Calinski-Harabasz (Caliński & Harabasz, 1974) tidak punya ambang absolut, sehingga nilainya hanya bermakna jika dibandingkan dengan K lain atau model lain pada data yang sama
 
 ### 6.2 Model 2 — ML / Advanced Model
 
