@@ -377,6 +377,7 @@ Notebook memvalidasi bahwa blok spasial pada training, validation, dan test tida
 **Nama Model:** K-Means Clustering (baseline) 
 **Teori Singkat:**  
 K-Means membagi data menjadi K cluster dengan meminimalkan jumlah kuadrat jarak Euclidean ke centroid cluster-nya.Lalu menetapkan setiap sampel ke centroid terdekat, dan menghitung ulang centroid sebagai rata-rata anggotanya, hingga konvergen. Karena hasil bergantung pada centroid awal, digunakan inisialisasi k-means++, yang memilih centroid awal agar saling berjauhan. Algoritma dijalankan 20 kali dengan inisialisasi berbeda, dan hasil dengan inersia terkecil dipilih 
+
 **Alasan Pemilihan:**  
 karena sederhana, cepat, mudah dijelaskan, dan cocok sebagai pembanding awal untuk fitur numerik yang sudah distandarisasi.
 
