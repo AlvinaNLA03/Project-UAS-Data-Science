@@ -382,7 +382,7 @@ karena sederhana, cepat, mudah dijelaskan, dan cocok sebagai pembanding awal unt
 
 #### 6.1.2 Hypothesis Space & Inductive Bias  **[M]**
 
-- **Model family / arsitektur:**clustering partisi (partitional), berbasis centroid, hard assignment, tanpa label (unsupervised).
+- **Model family / arsitektur:** clustering partisi (partitional), berbasis centroid, hard assignment, tanpa label (unsupervised).
 - **Hypothesis space:** semua pembagian ruang 9 fitur menjadi K = 4 wilayah. Setiap wilayah berbentuk sel Voronoi (konveks), dan batas antarcluster berupa bidang bisektor yang tegak lurus garis penghubung dua centroid
 - **Inductive bias / asumsi:** cluster kira-kira sferis dan kompak, berukuran serta berkepadatan relatif mirip; jarak Euclidean pada fitur terstandarisasi bermakna; setiap sampel masuk tepat satu cluster.
 - **Implikasi terhadap dataset Anda:** belum, karena ukuran cluster sangat timpang 148, 615, 2, dan 740 sampel.
